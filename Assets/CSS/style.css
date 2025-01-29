@@ -1,0 +1,52 @@
+body{
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgb(5, 0, 131) 0%, rgb(104, 0, 0) 100%);
+}
+
+.text-white {
+    color: white;
+}
+
+.game_title{
+    color: white;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.progress{
+    margin-top: 25px;
+}
+
+.parent > div {
+    background: white;
+    border: 2px solid gray;
+    border-radius: 5px;
+    width: 90px;
+    height: 110px;
+    background-size: cover;
+    background-position: center;
+}
+
+.countdown{
+    color: white;
+    text-align: center;
+    font-size: 20px;
+}
+
+.parent {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-column-gap: 30px;
+    grid-row-gap: 10px;
+    justify-items: center;
+    align-items: center;
+    justify-self: center;  /* Center the grid container horizontally */
+    align-self: center;    /* Center the grid container vertically */
+}
+
+.leaderboardingame{
+    margin-left: 10px;
+}
+
