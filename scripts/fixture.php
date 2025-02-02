@@ -13,7 +13,7 @@ $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
 
 $pdo->exec('TRUNCATE TABLE users');
 $pdo->exec('TRUNCATE TABLE `groups`');
-$pdo->exec('TRUNCATE TABLE score');
+$pdo->exec('TRUNCATE TABLE scores');
 
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
 
@@ -99,7 +99,7 @@ for ($i = 0; $i < 40; $i++) {
     $date_played = $faker->dateTimeBetween('-1 week', 'now')->format('Y-m-d');
     $difficulty_level = $faker->numberBetween(1, 3);
 
-    $query_score = "INSERT INTO `score` (`user_id`, `time_taken`, `date_played`, `difficulty_level`) 
+    $query_score = "INSERT INTO `scores` (`user_id`, `time_taken`, `date_played`, `difficulty_level`) 
                     VALUES (:user_id, :time_taken, :date_played, :difficulty_level)";
     $prep_score = $pdo->prepare($query_score);
 

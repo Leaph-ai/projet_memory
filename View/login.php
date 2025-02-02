@@ -1,12 +1,16 @@
 <div id="errors"></div>
 <form id="login-form" method="post" style="display: flex; align-items: center; justify-content: space-between; background-color: white; padding: 5px; border-radius: 5px;">
-    <div style="margin-right: 5px;">
+    <div>
         <input type="text" class="form-control" id="username" name="username" placeholder="Identifiant" required style="padding: 5px;">
     </div>
-    <div style="margin-right: 5px;">
+    <div>
         <input type="password" class="form-control" id="password" name="pass" placeholder="Mot de passe" required style="padding: 5px;">
     </div>
-    <button type="button" id="valid-login-btn" class="btn btn-primary" name="login_button" style="padding: 5px 10px;">Valider</button>
+    <div class="justify-content-end">
+        <a href="index.php?component=register" type="text" class=""><i></i>Créer un compte</a>
+        <button type="button" id="valid-login-btn" class="btn btn-primary" name="login_button">Se Connecter</button>
+    </div>
+
 </form>
 <script src="./Assets/JS/services/login.js" type="module"></script>
 <script type="module">

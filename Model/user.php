@@ -93,24 +93,3 @@ function updateUser(
 
     return true;
 }
-
-function isLinkedUser(PDO $pdo, int $id): bool
-{
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query="SELECT COUNT(*) AS `count` FROM user_person WHERE user_id = :id";
-    $prep = $pdo->prepare($query);
-    $prep->bindValue(':id', $id, PDO::PARAM_INT);
-    try
-    {
-        $prep->execute();
-    }
-    catch (PDOException $e)
-    {
-        return " erreur : ".$e->getCode() .' :</b> '. $e->getMessage();
-    }
-
-    $res = $prep->fetch();
-    $prep->closeCursor();
-
-    return $res['count'] > 0;
-}

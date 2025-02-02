@@ -1,41 +1,53 @@
 <?php
-function getUsersScore(PDO $pdo): array | string
+
+
+function getLeaderboard(PDO $pdo, int $currentPage = 1, int $usersPerPage = 10): array | string
+{
+    $offset = ($currentPage - 1) * $usersPerPage;
+
+    $query = "SELECT 
+                l.id,
+                l.time_taken,
+                l.date_played,
+                l.difficulty_level,
+                u.username
+              FROM 
+                scores l
+              JOIN 
+                users u ON l.user_id = u.id
+              ORDER BY 
+                l.time_taken ASC
+              LIMIT 
+                :limit OFFSET :offset";
+
+    $prep = $pdo->prepare($query);
+    $prep->bindValue(':limit', $usersPerPage, PDO::PARAM_INT);
+    $prep->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+    try {
+        $prep->execute();
+        $res = $prep->fetchAll(PDO::FETCH_ASSOC);
+        $prep->closeCursor();
+        return $res;
+    } catch (PDOException $e) {
+        return "Erreur SQL : " . $e->getMessage();
+    }
+}
+
+function countLeaderboardEntries(PDO $pdo): int
 {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query = "SELECT 
-                  u.username,
-                  s.date_played,
-                  s.time_taken,
-                  s.difficulty_level
-              FROM 
-                  scores s
-              JOIN 
-                  users u ON s.user_id = u.id
-              WHERE 
-                  (s.difficulty_level, s.time_taken) IN (
-                      SELECT 
-                          difficulty_level, 
-                          MIN(time_taken)
-                      FROM 
-                          scores
-                      GROUP BY 
-                          difficulty_level
-                  )
-              ORDER BY 
-                  s.difficulty_level, s.time_taken
-              LIMIT 9";
+
+    $query = "SELECT COUNT(*) as total FROM users";
     $prep = $pdo->prepare($query);
-    try
-    {
+
+    try {
         $prep->execute();
-    }
-    catch (PDOException $e)
-    {
-        return "erreur : ".$e->getCode() .' : '. $e->getMessage();
+    } catch (PDOException $e) {
+        return 0;
     }
 
-    $res = $prep->fetchAll();
-    $prep->closeCursor();
-
-    return $res;
+    $result = $prep->fetch(PDO::FETCH_ASSOC);
+    return (int)$result['total'];
 }
+

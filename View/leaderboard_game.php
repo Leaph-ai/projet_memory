@@ -18,8 +18,13 @@ require("_partials/errors.php")
                             <div class="col-12 mb-3">
                                 <div class="card ms-3 same-size-card">
                                     <div class="card-body d-flex flex-column justify-content-center text-center">
-                                        <h5 class="card-title"><?php echo $scoreForCard['username']; ?></h5>
-                                        <p class="card-text">Temps de résolution : <?php echo $scoreForCard['time_taken']; ?> secondes</p>
+                                        <h5 class="card-title"><?php echo htmlspecialchars($scoreForCard['username']); ?></h5>
+                                        <p class="card-text">
+                                            Temps de résolution : <?php echo htmlspecialchars($scoreForCard['time_taken']); ?> secondes
+                                        </p>
+                                        <p class="card-text">
+                                            Niveau de difficulté : <?php echo htmlspecialchars($scoreForCard['difficulty_level']); ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>

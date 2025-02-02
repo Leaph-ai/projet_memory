@@ -2,7 +2,7 @@
 /**
  * @var PDO $pdo
  */
-require "model/user.php";
+require "Model/user.php";
 $action = 'create';
 $errors = [];
 if (!empty($_GET['id'])) {
@@ -54,4 +54,4 @@ if (isset($_POST['edit_button'])) {
     }
 }
 
-require "view/user.php";
+require "View/user.php";

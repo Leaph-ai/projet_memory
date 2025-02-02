@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
     const parentElement = document.querySelector(".parent")
     const backCardImage = "Assets/images/backcard.png"
@@ -18,15 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let startMinutes = 5
     let time = startMinutes * 60
     let totalTime = time
+    let difficultyLevel = 1
 
     let timerInterval
 
     const startButton = document.querySelector("#start_button")
     const resetButton = document.querySelector("#reset_button")
-
-    const images = []
-
-
 
 
 
@@ -49,13 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let i = images.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-                [images[i], images[j]] = [images[j], images[i]]
+            [images[i], images[j]] = [images[j], images[i]]
         }
 
         for (let i = 0; i < numberOfCard; i++) {
             const card = document.createElement("div")
             card.className = `card-${i + 1}`
             card.dataset.card = images[i] || ""
+
 
             card.style.backgroundImage = `url('${backCardImage}')`
 
@@ -78,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return await response.json()
     }
 
-    const handleCardClick = (card) => {
+    const handleCardClick = async (card) => {
         if (lock) return
         if (card.dataset.revealed === "true") return
 
@@ -97,8 +94,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (matchedPairs === numberOfCard) {
                     clearInterval(timerInterval)
-                    countdown.innerHTML = "Gagné !"
-                    exportResults()
+                    startButton.innerHTML = "Gagné !"
+                    resetButton.innerHTML = "Rejouer"
+                    const finalScore = `${totalTime - time}`
+
+                    const query = await exportResults(finalScore, formatDate(currentDate), difficultyLevel)
+                    console.log(query)
                 }
             } else {
                 lock = true
@@ -135,50 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    startButton.addEventListener("click", () => {
-        startButton.disabled = true
-        startButton.innerHTML = "Bonne chance !"
-        gameStarted = true
-        if (!timerInterval) {
-            timerInterval = setInterval(updateCountdown, 1000)
-        }
-
-        level3Btn.disabled = true
-        level2Btn.disabled = true
-        level1Btn.disabled = true
-    })
-
-    resetButton.addEventListener("click", () => {
-        location.reload()
-    })
-
-    level1Btn.addEventListener("click", () => {
-        handleLevelBtnClick(level1Btn, [level2Btn, level3Btn])
-        resetTimeForLevel(5)
-        updateGridLayout(5)
-        numberOfCard = 20
-        countdown.innerHTML = `5:00`
-        createCards()
-    })
-
-    level2Btn.addEventListener("click", () => {
-        handleLevelBtnClick(level2Btn, [level1Btn, level3Btn])
-        resetTimeForLevel(4.5)
-        updateGridLayout(6)
-        numberOfCard = 24
-        countdown.innerHTML = `4:30`
-        createCards()
-    })
-
-    level3Btn.addEventListener("click", () => {
-        handleLevelBtnClick(level3Btn, [level1Btn, level2Btn])
-        resetTimeForLevel(4)
-        updateGridLayout(7)
-        numberOfCard = 28
-        countdown.innerHTML = `4:00`
-        createCards()
-    })
-
     const handleLevelBtnClick = (clickedButton, otherButtons) => {
         clickedButton.disabled = true
         clickedButton.classList.remove("btn-primary")
@@ -197,11 +154,80 @@ document.addEventListener("DOMContentLoaded", () => {
         totalTime = time
     }
 
+    if(startButton) {
+        startButton.addEventListener("click", () => {
+            startButton.disabled = true
+            startButton.innerHTML = "Bonne chance !"
+            gameStarted = true
+            if (!timerInterval) {
+                timerInterval = setInterval(updateCountdown, 1000)
+            }
+
+
+            level3Btn.disabled = true
+            level2Btn.disabled = true
+            level1Btn.disabled = true
+        })
+    }
+
+    if(resetButton) {
+        resetButton.addEventListener("click", () => {
+            location.reload()
+        })
+    }
+
+    if(level1Btn) {
+        level1Btn.addEventListener("click", () => {
+            handleLevelBtnClick(level1Btn, [level2Btn, level3Btn])
+            resetTimeForLevel(5)
+            updateGridLayout(5)
+            numberOfCard = 20
+            difficultyLevel = 1
+            countdown.innerHTML = `5:00`
+            createCards()
+        })
+    }
+
+    if(level2Btn) {
+        level2Btn.addEventListener("click", () => {
+            handleLevelBtnClick(level2Btn, [level1Btn, level3Btn])
+            resetTimeForLevel(4.5)
+            updateGridLayout(6)
+            numberOfCard = 24
+            difficultyLevel = 2
+            countdown.innerHTML = `4:30`
+            createCards()
+        })
+    }
+
+    if(level3Btn) {
+        level3Btn.addEventListener("click", () => {
+            handleLevelBtnClick(level3Btn, [level1Btn, level2Btn])
+            resetTimeForLevel(4)
+            updateGridLayout(7)
+            numberOfCard = 28
+            difficultyLevel = 3
+            countdown.innerHTML = `4:00`
+            createCards()
+        })
+    }
+    const currentDate = new Date()
+
+    const formatDate = (date) => {
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+
+        return `${year}-${month}-${day}`
+    };
+
+    
+
+
+
     updateGridLayout(5)
     createCards()
 
-    console.log(images)
-    // const currentDate = new Date()
-    // console.log(currentDate)
+
 
 })

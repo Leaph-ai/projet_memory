@@ -3,9 +3,11 @@
         <i class="fa-solid fa-user me-2"></i><?php echo $_SESSION['user_username']; ?>
     </a>
     <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="index.php?component=users">Utilisateurs</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><hr class="dropdown-divider"></li>
+        <?php if ($_SESSION['user_username'] === 'admin'): ?>
+            <li><a class="dropdown-item" href="index.php?component=users">Utilisateurs</a></li>
+            <li><a class="dropdown-item" href="index.php?component=leaderboard">Leaderboard</a></li>
+            <li><hr class="dropdown-divider"></li>
+        <?php endif; ?>
         <li><a class="dropdown-item" href="index.php?disconnect=true">Se déconnecter</a></li>
     </ul>
 </li>

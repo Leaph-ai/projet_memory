@@ -45,14 +45,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && (($_SERVER['HTTP_X_REQUESTED_WI
         <?php if (isset($_SESSION['auth'])): ?>
             <?php require "_partials/dropdown.php"; ?>
         <?php else: ?>
-            <?php require 'Controller/login.php';
-                   require "Controller/leaderboard.php";?>
-
+            <?php
+            if (!isset($_GET['component']) || $_GET['component'] !== 'register') {
+                require 'Controller/login.php';
+                require "Controller/unloggedleaderboard.php";
+            }
+            ?>
         <?php endif; ?>
     </div>
     <?php
     if (isset($_GET['component'])) {
         $componentName = cleanString($_GET['component']);
+        if (($componentName === 'users' || $componentName === 'leaderboard') && $_SESSION['user_username'] !== 'admin') {
+            header("Location: index.php");
+            exit();
+        }
+
         if (file_exists("Controller/$componentName.php")) {
             require "Controller/$componentName.php";
         }
@@ -62,7 +70,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && (($_SERVER['HTTP_X_REQUESTED_WI
         }
     }
     require "_partials/errors.php";
-    var_dump($_SESSION);
     ?>
 </div>
 <script src="Includes/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -1,14 +1,14 @@
 <div class="col-12 mt-3">
     <div class="d-flex justify-content-start">
-        <button id="button_level1" class="btn btn-secondary btn-sm me-2">Start Level 1</button>
-        <button id="button_level2" class="btn btn-primary btn-sm me-2">Start Level 2</button>
-        <button id="button_level3" class="btn btn-primary btn-sm">Start Level 3</button>
+        <button id="button_level1" class="btn btn-secondary btn-sm me-2">Niveau 1</button>
+        <button id="button_level2" class="btn btn-primary btn-sm me-2">Niveau 2</button>
+        <button id="button_level3" class="btn btn-primary btn-sm">Niveau 3</button>
     </div>
 </div>
 <div class="d-flex">
     <div class="parent"></div>
     <div class="leaderboard ms-auto">
-        <?php require 'Controller/leaderboard_level1.php'; ?>
+        <?php require 'Controller/leaderboard_game.php'; ?>
     </div>
 </div>
 <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
@@ -19,5 +19,3 @@
     <button id="start_button" class="btn btn-primary">Commencer</button>
     <button id="reset_button" class="btn btn-danger">Recommencer</button>
 </div>
-
-<script type="module" src="./Assets/JS/cards.js"></script>

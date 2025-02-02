@@ -3,7 +3,7 @@
  * @var PDO $pdo
  * @var string $actionName
  */
-require "model/leaderboard_level1.php";
+require "model/leaderboard_game.php";
 
 
 $scoresForCards = getUsersScoreForCards($pdo);
@@ -29,4 +29,4 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
     }
 }
 
-require "View/leaderboard_level1.php";
+require "View/leaderboard_game.php";

@@ -4,13 +4,12 @@ function getUsersScoreForCards(PDO $pdo): array | string
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $query = "SELECT 
     u.username,
-    s.time_taken
+    s.time_taken,
+    s.difficulty_level
 FROM 
     scores s
 JOIN 
     users u ON s.user_id = u.id
-WHERE 
-    s.difficulty_level = 1
 ORDER BY 
     s.time_taken
 limit 10

@@ -3,30 +3,39 @@
  * @var PDO $pdo
  * @var string $actionName
  */
-require "model/leaderboard.php";
+require "Model/leaderboard.php";
 
+$currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$usersPerPage = 10;
 
-$scores = getUsersScore($pdo);
-if (!is_array($scores)) {
-    $errors[] = $scores;
+$totalEntries = countLeaderboardEntries($pdo);
+$totalPages = ceil($totalEntries / $usersPerPage);
+
+$leaderboard = getLeaderboard($pdo, $currentPage, $usersPerPage);
+
+if (!is_array($leaderboard)) {
+    $errors[] = $leaderboard;
+    $leaderboard = [];
 }
 
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-    $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'
-) {
-    switch ($actionName) {
-        case 'toggle_enabled':
-            $id = cleanString($_GET['id']);
-            $res = toggleEnabled($pdo, $id);
-            header('Content-Type: application/json');
-            if (is_bool($res)) {
-                echo json_encode(['success' => true]);
-            } else {
-                echo json_encode(['error' => $res]);
-            }
-            exit();
-            break;
+
+if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = cleanString($_GET['id']);
+
+    $query = "DELETE FROM scores WHERE id = :id";
+    $prep = $pdo->prepare($query);
+
+    try {
+        $prep->bindParam(':id', $id, PDO::PARAM_INT);
+        $prep->execute();
+    } catch (PDOException $e) {
+        $errors[] = "Erreur lors de la suppression : " . $e->getMessage();
     }
+
+    header("Location: index.php?component=leaderboard");
+    exit();
 }
+
+
 
 require "View/leaderboard.php";
